@@ -1,9 +1,18 @@
-{{-- resources/views/user/shop/_grid.blade.php --}}
 @if (session('success'))
   <div class="mb-4 rounded border border-red-600 bg-red-600/10 px-3 py-2">
     {{ session('success') }}
   </div>
 @endif
+
+<div class="w-full flex justify-center mb-10">
+  <div class="text-center">
+    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-red-900">
+      Products
+    </h1>
+    <div class="mx-auto mt-1 h-1 w-24 rounded-full bg-gradient-to-r from-red-600 to-red-400"></div>
+  </div>
+</div>
+
 
 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
   @forelse ($products as $p)
@@ -35,14 +44,7 @@
             <form method="POST" action="{{ route('cart.store') }}" class="flex items-center gap-2">
               @csrf
               <input type="hidden" name="product_id" value="{{ $p->id }}">
-              <input
-                type="number"
-                name="quantity"
-                value="1"
-                min="1"
-                max="{{ max(1, $p->stock) }}"
-                class="w-20 rounded border border-red-200 bg-white px-3 py-2 text-red-900 focus:outline-none focus:ring-2 focus:ring-red-400"
-              >
+            
               <button
                 type="submit"
                 class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow

@@ -5,9 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\NotificationController;
@@ -18,6 +17,7 @@ use App\Http\Controllers\Admin\PickupStationController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController  as UserOrderController; 
 
 Route::get('/', [UserController::class, 'index'])->name('home');
 
@@ -55,9 +55,7 @@ Route::prefix('admin')
         Route::get('products/view', [ProductController::class, 'index'])
             ->name('products.view');
 
-        // Orders / Customers / Reports
-        Route::resource('orders', OrderController::class)->only(['index','show']);
-        Route::resource('customers', CustomerController::class)->only(['index','show']);
+        // Reports
         Route::resource('reports', ReportController::class)->only(['index']);
 
 
@@ -102,3 +100,28 @@ Route::middleware('auth')->group(function () {
 */
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{product:slug}', [ShopController::class, 'show'])->name('shop.show');
+
+/*
+|--------------------------------------------------------------------------
+| Orders (for users)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('/orders', [UserOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [UserOrderController::class, 'show'])->name('orders.show'); 
+
+    Route::patch('/orders/{order}/cancel', [UserOrderController::class,'cancel'])
+        ->name('orders.cancel');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Orders (for admins)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth','verified','can:admin'])
+    ->group(function () {
+        Route::resource('orders', AdminOrderController::class)->only(['index','show','update','destroy']);
+    });

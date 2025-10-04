@@ -18,7 +18,6 @@
               <li><a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 hover:bg-white/10">Dashboard</a></li>
               <li><a href="{{ route('admin.orders.index') }}" class="block px-4 py-2 hover:bg-white/10">Orders</a></li>
               <li><a href="{{ route('admin.products.index') }}" class="block px-4 py-2 hover:bg-white/10">Products</a></li>
-              <li><a href="{{ route('admin.customers.index') }}" class="block px-4 py-2 hover:bg-white/10">Customers</a></li>
               <li><a href="{{ route('admin.reports.index') }}" class="block px-4 py-2 hover:bg-white/10">Reports</a></li>
               <li><a href="{{ route('admin.settings') }}" class="block px-4 py-2 hover:bg-white/10">Settings</a></li>
             </ul>
@@ -127,13 +126,7 @@
             Products
           </a>
         </li>
-        <li>
-          <a href="{{ route('admin.customers.index') }}"
-             class="inline-flex items-center border-b-2 px-1.5 py-3
-               {{ request()->routeIs('admin.customers.*') ? 'border-red-600 text-white' : 'border-transparent text-white/80 hover:text-white hover:border-red-600' }}">
-            Customers
-          </a>
-        </li>
+       
         <li>
           <a href="{{ route('admin.stations.index') }}"
              class="inline-flex items-center border-b-2 px-1.5 py-3

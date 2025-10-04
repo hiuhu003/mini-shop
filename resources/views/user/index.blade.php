@@ -20,6 +20,7 @@
                 @include('user.shop.index', ['products' => $products])
             </section>
                 
+@include('user.contact')
 
          <!--Footer Section -->
          @include('user.footer')

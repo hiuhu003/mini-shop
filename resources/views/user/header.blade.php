@@ -67,7 +67,7 @@
           <div class="absolute right-0 mt-2 w-48 rounded-lg bg-white py-2 text-sm text-gray-800 shadow-lg ring-1 ring-black/5">
             @auth
               <a href="" class="block px-3 py-2 hover:bg-gray-50">My Profile</a>
-              <a href="" class="block px-3 py-2 hover:bg-gray-50">Orders</a>
+              <a href="{{route ('orders.index')}}" class="block px-3 py-2 hover:bg-gray-50">Orders</a>
               <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="block w-full text-left px-3 py-2 hover:bg-gray-50">Sign out</button>

@@ -1,6 +1,5 @@
  <script src="https://cdn.tailwindcss.com"></script>
 
- 
 <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
   <div class="grid md:grid-cols-2 gap-8 items-start">
     {{-- Image --}}

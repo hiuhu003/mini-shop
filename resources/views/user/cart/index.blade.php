@@ -1,7 +1,19 @@
  <script src="https://cdn.tailwindcss.com"></script>
 
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+
+    {{-- Back to shopping --}}
+  <div class="mb-4">
+    <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-red-700 hover:text-red-800 hover:underline">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M14.7 6.3a1 1 0 0 1 0 1.4L10.4 12l4.3 4.3a1 1 0 1 1-1.4 1.4l-5-5a1 1 0 0 1 0-1.4l5-5a1 1 0 0 1 1.4 0z"/>
+      </svg>
+      Go back and continue shopping
+    </a>
+  </div>
+  
   <div class="grid gap-6 md:grid-cols-[1fr,350px]">
+   
     {{-- LEFT: Cart list --}}
     <section class="rounded-xl bg-white border border-red-100 shadow-sm overflow-hidden">
       <div class="px-4 py-3 border-b border-red-100">
@@ -118,5 +130,6 @@
         </form>
       </div>
     </aside>
+    
   </div>
 </div>
