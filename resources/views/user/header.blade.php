@@ -50,12 +50,11 @@
             <circle cx="10" cy="20" r="1.75" />
             <circle cx="17" cy="20" r="1.75" />
           </svg>
-          @php($cartCount = session('cart.count', 0))
-          @if($cartCount > 0)
+        
             <span class="absolute -top-1 -right-1 min-w-[1.25rem] rounded-full bg-white px-1.5 py-0.5 text-center text-xs font-bold text-red-600 shadow-sm">
-              {{ $cartCount }}
+              {{ $cartCount = array_sum(session('cart', [])); }}
             </span>
-          @endif
+         
         </a>
 
         {{-- Account --}}

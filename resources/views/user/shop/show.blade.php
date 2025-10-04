@@ -59,7 +59,7 @@
         </button>
 
         <a
-          href="{{ route('shop.index') }}"
+          href="{{ route('home') }}"
           class="inline-flex items-center justify-center rounded-full border border-red-600 px-5 py-2.5 font-semibold text-red-700 hover:bg-red-600 hover:text-white"
         >
           ← Back to products

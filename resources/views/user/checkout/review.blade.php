@@ -1,111 +1,154 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
-<div class="mx-auto max-w-4xl p-6">
-  <h1 class="text-2xl font-bold mb-4">Your Cart ({{ $count }})</h1>
-
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 text-red-900">
   @if (session('success'))
-    <div class="mb-4 rounded border border-red-600 bg-red-600/10 px-3 py-2">
-      {{ session('success') }}
-    </div>
+    <div class="mb-4 rounded-lg bg-red-50 border border-red-200 px-3 py-2">{{ session('success') }}</div>
   @endif
   @if (session('error'))
-    <div class="mb-4 rounded border border-red-600 bg-red-600/10 px-3 py-2">
-      {{ session('error') }}
-    </div>
+    <div class="mb-4 rounded-lg bg-red-50 border border-red-200 px-3 py-2">{{ session('error') }}</div>
   @endif
 
-  @if (empty($items))
-    <p>Your cart is empty.</p>
-  @else
-    <div class="space-y-3">
-      @foreach ($items as $row)
-        <div class="rounded border border-red-600/40 bg-black/20 p-3">
-          <div class="flex items-center justify-between gap-3">
-            {{-- Left: image + name + "view" --}}
-            <div class="flex items-center gap-3">
-              <img
-                src="{{ $row['product']->image_path ? asset('storage/'.$row['product']->image_path) : 'https://via.placeholder.com/80' }}"
-                class="h-16 w-16 object-cover rounded"
-                alt="{{ $row['product']->name }}"
-              >
-              <div>
-                <div class="font-semibold">
-                  <a href="{{ route('shop.show', $row['product']) }}" class="hover:underline">
-                    {{ $row['product']->name }}
-                  </a>
-                </div>
-                <div class="text-sm text-red-400">Ksh {{ number_format($row['product']->price, 2) }}</div>
+  {{-- Back to shopping --}}
+  <div class="mb-4">
+    <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-red-700 hover:text-red-800 hover:underline">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M14.7 6.3a1 1 0 0 1 0 1.4L10.4 12l4.3 4.3a1 1 0 1 1-1.4 1.4l-5-5a1 1 0 0 1 0-1.4l5-5a1 1 0 0 1 1.4 0z"/>
+      </svg>
+      Go back and continue shopping
+    </a>
+  </div>
+
+  {{-- One form wraps both columns so the right-side button submits everything --}}
+  <form method="POST" action="{{ route('checkout.place') }}" class="grid gap-6 md:grid-cols-[1fr,340px]">
+    @csrf
+
+    <div class="space-y-6">
+      {{-- STEP 1: CUSTOMER DETAILS --}}
+      <section class="rounded-xl bg-white border border-red-100 shadow-sm">
+        <div class="px-4 py-3 border-b border-red-100">
+          <h2 class="font-extrabold">1. CUSTOMER DETAILS</h2>
+        </div>
+        <div class="p-4 grid sm:grid-cols-2 gap-3">
+          <div class="sm:col-span-2">
+            <label class="text-sm font-semibold">Full name</label>
+            <input name="name" value="{{ old('name', auth()->user()->name ?? '') }}"
+                   class="mt-1 w-full rounded-lg border border-red-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-300" required>
+          </div>
+          <div>
+            <label class="text-sm font-semibold">Phone</label>
+            <input name="phone" value="{{ old('phone') }}"
+                   class="mt-1 w-full rounded-lg border border-red-200 bg-white px-3 py-2" required>
+          </div>
+          <div>
+            <label class="text-sm font-semibold">Email (optional)</label>
+            <input type="email" name="email" value="{{ old('email', auth()->user()->email ?? '') }}"
+                   class="mt-1 w-full rounded-lg border border-red-200 bg-white px-3 py-2">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="text-sm font-semibold">Address / Notes</label>
+            <input name="address" value="{{ old('address') }}"
+                   class="mt-1 w-full rounded-lg border border-red-200 bg-white px-3 py-2">
+          </div>
+        </div>
+      </section>
+
+      {{-- STEP 2: PICKUP STATION --}}
+      <section class="rounded-xl bg-white border border-red-100 shadow-sm">
+        <div class="px-4 py-3 border-b border-red-100">
+          <h2 class="font-extrabold">2. DELIVERY DETAILS</h2>
+          <p class="text-sm text-red-800/70 mt-1">Pick-up Station</p>
+        </div>
+
+        <div class="p-4 space-y-3">
+          @forelse ($stations as $s)
+            <label class="block rounded-lg border border-red-200 hover:border-red-300">
+              <input type="radio" name="station_id" value="{{ $s->id }}" class="sr-only peer" {{ old('station_id') == $s->id ? 'checked' : '' }} required>
+              <div class="p-3 peer-checked:bg-red-50">
+                <div class="font-semibold">{{ $s->name }}</div>
+                <div class="text-sm text-red-800/80">{{ $s->address }} @if($s->city) — {{ $s->city }} @endif</div>
+                @if($s->notes)<div class="text-xs text-red-800/70 mt-1">{{ $s->notes }}</div>@endif
               </div>
-            </div>
+            </label>
+          @empty
+            <p class="text-sm">No pickup stations yet. Please check back later.</p>
+          @endforelse
 
-            {{-- Middle: quantity update --}}
-            <form method="POST" action="{{ route('cart.update', $row['product']) }}" class="flex items-center gap-2">
-              @csrf
-              @method('PATCH')
-              <label for="qty-{{ $row['product']->id }}" class="sr-only">Quantity</label>
-              <input
-                id="qty-{{ $row['product']->id }}"
-                type="number"
-                name="quantity"
-                value="{{ $row['qty'] }}"
-                min="0"
-                class="w-20 rounded bg-white text-red-900 border border-red-300 px-3 py-1.5 text-center focus:outline-none focus:ring-2 focus:ring-red-400"
-              />
-              <button class="rounded bg-red-600 px-3 py-1.5 text-sm font-semibold text-black hover:bg-red-500">
-                Update
-              </button>
-            </form>
-
-            {{-- Right: line subtotal + remove --}}
-            <div class="text-right">
-              <div class="font-bold">Ksh {{ number_format($row['subtotal'], 2) }}</div>
-              <form method="POST" action="{{ route('cart.destroy', $row['product']) }}" class="mt-1">
-                @csrf
-                @method('DELETE')
-                <button class="text-sm text-red-400 hover:text-red-300 underline" onclick="return confirm('Remove this item?')">
-                  Remove
-                </button>
-              </form>
-            </div>
+          <div class="text-sm mt-2">
+            <a href="{{ route('cart.index') }}" class="underline">Modify cart</a>
           </div>
         </div>
-      @endforeach
+      </section>
+
+      {{-- STEP 3: PAYMENT METHOD --}}
+      <section class="rounded-xl bg-white border border-red-100 shadow-sm">
+        <div class="px-4 py-3 border-b border-red-100">
+          <h2 class="font-extrabold">3. PAYMENT METHOD</h2>
+        </div>
+
+        <div class="p-4 space-y-4">
+          {{-- segmented control --}}
+          <div class="flex gap-2">
+            <label class="flex-1 cursor-pointer">
+              <input type="radio" name="payment_method" value="mpesa" class="peer sr-only" {{ old('payment_method', 'mpesa') === 'mpesa' ? 'checked' : '' }}>
+              <div class="rounded-lg border border-red-200 bg-white px-3 py-2 text-center font-semibold peer-checked:bg-red-600 peer-checked:text-white">
+                M-Pesa
+              </div>
+            </label>
+            <label class="flex-1 cursor-pointer">
+              <input type="radio" name="payment_method" value="card" class="peer sr-only" {{ old('payment_method') === 'card' ? 'checked' : '' }}>
+              <div class="rounded-lg border border-red-200 bg-white px-3 py-2 text-center font-semibold peer-checked:bg-red-600 peer-checked:text-white">
+                Card
+              </div>
+            </label>
+          </div>
+
+          {{-- M-PESA FIELD --}}
+          <div class="{{ old('payment_method', 'mpesa') === 'mpesa' ? '' : 'hidden' }} mpesa-field">
+            <label class="text-sm font-semibold">M-Pesa phone</label>
+            <input name="mpesa_phone" value="{{ old('mpesa_phone') }}"
+                   class="mt-1 w-full rounded-lg border border-red-200 bg-white px-3 py-2" placeholder="07xx ..." >
+          </div>
+
+          {{-- CARD FIELD --}}
+          <div class="{{ old('payment_method') === 'card' ? '' : 'hidden' }} card-field">
+            <label class="text-sm font-semibold">Card last 4 (demo)</label>
+            <input name="card_last4" value="{{ old('card_last4') }}"
+                   class="mt-1 w-full rounded-lg border border-red-200 bg-white px-3 py-2" placeholder="1234" >
+          </div>
+        </div>
+      </section>
     </div>
 
-    {{-- Totals + payment method --}}
-    <div class="mt-6 rounded border border-red-600/40 bg-black/20 p-4">
-      <div class="flex items-center justify-between">
-        <div class="text-lg font-bold">Total: Ksh {{ number_format($total, 2) }}</div>
+    {{-- RIGHT COLUMN: ORDER SUMMARY --}}
+    <aside class="md:sticky md:top-20">
+      <div class="rounded-xl bg-white border border-red-100 shadow-sm p-4">
+        <div class="text-sm font-semibold">ORDER SUMMARY</div>
+
+        <div class="mt-3 space-y-2">
+          <div class="flex items-baseline justify-between">
+            <span class="text-sm">Items total ({{ $count }})</span>
+            <span class="text-xl font-extrabold">KSh {{ number_format($total, 2) }}</span>
+          </div>
+        </div>
+
+        <button type="submit" class="mt-4 w-full rounded-lg bg-red-600 px-4 py-3 font-extrabold text-white shadow hover:bg-red-700">
+          Confirm order (KSh {{ number_format($total, 0) }})
+        </button>
+
+        <p class="mt-3 text-[12px] text-red-800/70">
+          By proceeding, you agree to the Terms & Conditions.
+        </p>
       </div>
-
-      <form method="POST" action="{{ route('checkout.start') }}" class="mt-4 space-y-3">
-        @csrf
-        <fieldset class="space-y-2">
-          <legend class="font-semibold">Choose payment method</legend>
-
-          <label class="flex items-center gap-2">
-            <input type="radio" name="payment_method" value="mpesa" checked>
-            <span>M-Pesa</span>
-          </label>
-          <div class="pl-6">
-            <input type="text" name="mpesa_phone" placeholder="M-Pesa phone (e.g. 07xx…)" class="w-full max-w-sm rounded bg-white text-red-900 border border-red-300 px-3 py-2">
-          </div>
-
-          <label class="flex items-center gap-2 mt-3">
-            <input type="radio" name="payment_method" value="card">
-            <span>Card</span>
-          </label>
-          <div class="pl-6">
-            <input type="text" name="card_last4" placeholder="Card last 4 (demo)" class="w-full max-w-sm rounded bg-white text-red-900 border border-red-300 px-3 py-2">
-          </div>
-        </fieldset>
-
-        <div class="pt-2">
-          <button class="rounded bg-red-600 px-4 py-2 font-semibold text-black hover:bg-red-500">
-            Proceed to checkout
-          </button>
-        </div>
-      </form>
-    </div>
-  @endif
+    </aside>
+  </form>
 </div>
+
+{{-- Tiny toggle for payment inputs --}}
+<script>
+  document.addEventListener('change', (e) => {
+    if (e.target.name === 'payment_method') {
+      document.querySelector('.mpesa-field')?.classList.toggle('hidden', e.target.value !== 'mpesa');
+      document.querySelector('.card-field')?.classList.toggle('hidden', e.target.value !== 'card');
+    }
+  });
+</script>

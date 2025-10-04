@@ -107,31 +107,12 @@
           <span class="text-2xl font-extrabold text-red-900">KSh {{ number_format($total, 2) }}</span>
         </div>
 
-        <form method="POST" action="{{ route('checkout.start') }}" class="mt-4 space-y-3">
+        <form method="GET" action="{{ route('checkout.index') }}" class="mt-4 space-y-3">
           @csrf
 
-          {{-- payment selector --}}
-          <div class="flex gap-2">
-            <label class="flex-1 cursor-pointer">
-              <input type="radio" name="payment_method" value="mpesa" class="peer sr-only" checked>
-              <div class="rounded-lg border border-red-200 bg-white px-3 py-2 text-center font-semibold text-red-900 peer-checked:bg-red-600 peer-checked:text-white">
-                M-Pesa
-              </div>
-            </label>
-            <label class="flex-1 cursor-pointer">
-              <input type="radio" name="payment_method" value="card" class="peer sr-only">
-              <div class="rounded-lg border border-red-200 bg-white px-3 py-2 text-center font-semibold text-red-900 peer-checked:bg-red-600 peer-checked:text-white">
-                Card
-              </div>
-            </label>
-          </div>
-
-          <input name="mpesa_phone" placeholder="M-Pesa phone (07xx…)"
-                 class="w-full rounded-lg border border-red-200 bg-white px-3 py-2 text-red-900 placeholder:text-red-800/50" />
-          <input name="card_last4" placeholder="Card last 4 (demo)"
-                 class="w-full rounded-lg border border-red-200 bg-white px-3 py-2 text-red-900 placeholder:text-red-800/50" />
 
           <button class="mt-2 w-full rounded-lg bg-red-600 px-4 py-3 font-extrabold text-white shadow hover:bg-red-700">
+            
             Checkout (KSh {{ number_format($total, 0) }})
           </button>
         </form>

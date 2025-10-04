@@ -135,10 +135,10 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('admin.reports.index') }}"
+          <a href="{{ route('admin.stations.index') }}"
              class="inline-flex items-center border-b-2 px-1.5 py-3
                {{ request()->routeIs('admin.reports.*') ? 'border-red-600 text-white' : 'border-transparent text-white/80 hover:text-white hover:border-red-600' }}">
-            Reports
+            Pickup-Stations
           </a>
         </li>
         

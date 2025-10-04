@@ -57,8 +57,8 @@ class CartController extends Controller
         $qty = (int)($data['quantity'] ?? 1);
         $cart = session('cart', []);
         $cart[$data['product_id']] = ($cart[$data['product_id']] ?? 0) + $qty;
+        session(['cart' => $cart]);
 
-        session(['cart' => $cart, 'cart.count' => array_sum($cart)]);
         return back()->with('success', 'Added to cart.');
     }
 
@@ -92,7 +92,7 @@ class CartController extends Controller
         } else {
             $cart[$product->id] = $qty;
         }
-        session(['cart' => $cart, 'cart.count' => array_sum($cart)]);
+        session(['cart' => $cart]);        
         return back()->with('success', 'Cart updated.');
     }
 
@@ -104,7 +104,7 @@ class CartController extends Controller
         $cart = session('cart', []);
         unset($cart[$product->id]);
 
-        session(['cart' => $cart, 'cart.count' => array_sum($cart)]);
+        session(['cart' => $cart]);
         return back()->with('success', 'Item removed.');
 
     }
