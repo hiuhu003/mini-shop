@@ -21,7 +21,7 @@ use App\Http\Controllers\OrderController  as UserOrderController;
 
 Route::get('/', [UserController::class, 'index'])->name('home');
 
-Route::get('/dashboard', function () {
+Route::get('/dashboar', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -125,3 +125,6 @@ Route::prefix('admin')
     ->group(function () {
         Route::resource('orders', AdminOrderController::class)->only(['index','show','update','destroy']);
     });
+
+    //Contact page
+    Route::view('/contact', 'user.contact')->name('user.contact');

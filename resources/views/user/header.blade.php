@@ -90,8 +90,7 @@
           <nav class="absolute right-0 mt-2 w-64 rounded-lg bg-white text-gray-800 shadow-lg ring-1 ring-black/5">
             <ul class="py-2">
               <li><a href="" class="block px-4 py-2 hover:bg-gray-50">Home</a></li>
-              <li><a href="" class="block px-4 py-2 hover:bg-gray-50">Shop</a></li>
-              <li><a href="" class="block px-4 py-2 hover:bg-gray-50">Deals</a></li>
+              <li><a href="" class="block px-4 py-2 hover:bg-gray-50">Products</a></li>
               <li><a href="" class="block px-4 py-2 hover:bg-gray-50">Contact</a></li>
             </ul>
           </nav>
@@ -105,10 +104,9 @@
   <div class="hidden md:block border-t border-white/15">
     <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <ul class="flex gap-6 py-2 text-sm">
-        <li><a href="" class="inline-flex items-center rounded-md px-2 py-1 hover:bg-white/10">Shop</a></li>
-        <li><a href="" class="inline-flex items-center rounded-md px-2 py-1 hover:bg-white/10">Deals</a></li>
-        <li><a href="" class="inline-flex items-center rounded-md px-2 py-1 hover:bg-white/10">About</a></li>
-        <li><a href="" class="inline-flex items-center rounded-md px-2 py-1 hover:bg-white/10">Contact</a></li>
+           <li><a href="" class="block px-4 py-2 hover:bg-gray-50">Home</a></li>
+            <li><a href="" class="block px-4 py-2 hover:bg-gray-50">Products</a></li>
+            <li><a href="{{route('user.contact')}}" class="block px-4 py-2 hover:bg-gray-50">Contact</a></li>
       </ul>
     </nav>
   </div>

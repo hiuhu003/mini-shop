@@ -32,7 +32,7 @@ class OrderController extends Controller
                 });
             })
             ->latest()
-            ->paginate(20)
+            ->paginate(5)
             ->withQueryString();
 
         $statuses = Order::STATUS_MAP;

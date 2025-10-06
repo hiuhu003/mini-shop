@@ -66,7 +66,7 @@
       <div class="relative overflow-hidden rounded-2xl ring-1 ring-red-100 shadow-lg">
         {{-- Replace with your asset image --}}
         <img
-          src="{{ asset('images/hero-main.jpg') }}"
+           src="{{ asset('build/assets/images/hero-main.jpeg') }}"
           alt="Bestsellers from Mini-Shop"
           class="h-[260px] w-full object-cover sm:h-[320px] md:h-[380px]"
         />

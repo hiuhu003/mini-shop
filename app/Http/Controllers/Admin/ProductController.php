@@ -29,7 +29,7 @@ class ProductController extends Controller
                 $builder->where('stock', '<=', $LOW_STOCK_THRESHOLD);
             })
             ->latest()
-            ->paginate(15)
+            ->paginate(5)
             ->withQueryString();
         return view('Admin.products.view', compact('products')); 
    }

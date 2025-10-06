@@ -13,7 +13,7 @@ class ShopController extends Controller
      */
     public function index()
     {
-        $products = Product::where('is_active', true)->latest()->paginate(12);
+        $products = Product::where('is_active', true)->latest()->paginate(5);
         return view('user.shop.index', compact('products'));
     }
 
