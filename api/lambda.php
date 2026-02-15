@@ -1,20 +1,33 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
+// Create necessary temp directories for Vercel's read-only filesystem
+$tempDirs = [
+    '/tmp/storage',
+    '/tmp/storage/framework',
+    '/tmp/storage/framework/views',
+    '/tmp/storage/framework/cache',
+    '/tmp/storage/framework/sessions',
+    '/tmp/storage/logs',
+    '/tmp/bootstrap/cache'
+];
 
-define('LARAVEL_START', microtime(true));
-
-// Determine if the application is in maintenance mode...
-if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
-    require $maintenance;
+foreach ($tempDirs as $dir) {
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0755, true);
+    }
 }
 
-// Register the Composer autoloader...
-require __DIR__.'/../vendor/autoload.php';
+// Create bootstrap cache files for Laravel 11
+$bootstrapFiles = [
+    '/tmp/bootstrap/cache/packages.php' => '<?php return [];',
+    '/tmp/bootstrap/cache/services.php' => '<?php return [];'
+];
 
-// Bootstrap Laravel and handle the request...
-/** @var Application $app */
-$app = require_once __DIR__.'/../bootstrap/app.php';
+foreach ($bootstrapFiles as $file => $content) {
+    if (!file_exists($file)) {
+        @file_put_contents($file, $content);
+    }
+}
 
-$app->handleRequest(Request::capture());
+// Require the original Laravel entry point
+require __DIR__ . '/../public/index.php';
