@@ -11,5 +11,10 @@
       "src": "/(.*)",
       "dest": "/api/lambda.php"
     }
-  ]
+  ],
+  "env": {
+    "APP_ENV": "production",
+    "APP_DEBUG": "false",
+    "APP_URL": "https://mini-shop-y9rd.vercel.app/"
+  }
 }
